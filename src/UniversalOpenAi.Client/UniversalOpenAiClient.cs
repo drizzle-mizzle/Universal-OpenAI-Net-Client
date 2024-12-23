@@ -50,13 +50,13 @@ public class UniversalOpenAiClient
         DEFAULT_HEADERS = headers;
     }
 
-    public Task<CompletionsResponse> CompleteAsync(string model, ChatMessage[] messages)
-        => CompleteAsync(DEFAULT_URL_BASE!, DEFAULT_API_KEY!, model, messages);
+    public Task<CompletionsResponse> CompleteAsync(string model, ChatMessage[] messages, GenerationSettings? generationSettings = null)
+        => CompleteAsync(DEFAULT_URL_BASE!, DEFAULT_API_KEY!, model, messages, generationSettings);
 
-    public Task<CompletionsResponse> CompleteAsync(string apiKey, string model, ChatMessage[] messages)
-        => CompleteAsync(DEFAULT_URL_BASE!, apiKey, model, messages);
+    public Task<CompletionsResponse> CompleteAsync(string apiKey, string model, ChatMessage[] messages, GenerationSettings? generationSettings = null)
+        => CompleteAsync(DEFAULT_URL_BASE!, apiKey, model, messages, generationSettings);
 
-    public async Task<CompletionsResponse> CompleteAsync(string baseUrl, string apiKey, string model, ChatMessage[] messages)
+    public async Task<CompletionsResponse> CompleteAsync(string baseUrl, string apiKey, string model, ChatMessage[] messages, GenerationSettings? generationSettings = null)
     {
         var request = new HttpRequestMessage(HttpMethod.Post, baseUrl + "/chat/completions");
 
@@ -75,6 +75,19 @@ public class UniversalOpenAiClient
             ["model"] = model,
             ["messages"] = JToken.FromObject(messages, _defaultSerializer),
         };
+
+        if (generationSettings is not null)
+        {
+            body["temperature"] = generationSettings.Temperature;
+            body["top_p"] = generationSettings.TopP;
+            body["top_k"] = generationSettings.TopK;
+            body["frequency_penalty"] = generationSettings.FrequencyPenalty;
+            body["presence_penalty"] = generationSettings.PresencePenalty;
+            body["repetition_penalty"] = generationSettings.RepetitionPenalty;
+            body["min_p"] = generationSettings.MinP;
+            body["top_a"] = generationSettings.TopA;
+            body["max_tokens"] = generationSettings.MaxTokens;
+        }
 
         var json = JsonConvert.SerializeObject(body, _defaultSettings);
         request.Content = new StringContent(json, Encoding.UTF8, "application/json");

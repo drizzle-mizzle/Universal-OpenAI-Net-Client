@@ -9,7 +9,7 @@ public class CompletionsResponse
     public string Model { get; set; } = null!; // "model": "gpt-4o-mini"
     public string SystemFingerprint { get; set; } = null!; // "system_fingerprint": "fp_44709d6fcb",
     public Choice[] Choices { get; set; } = []; // "choices": [ {} ]
-    public Usage? Usage { get; set; }  // "usage": { }
+    public Usage? Usage { get; set; } // "usage": { }
 }
 
 
