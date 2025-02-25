@@ -7,7 +7,7 @@ using UniversalOpenAi.Client.Models;
 namespace UniversalOpenAi.Client;
 
 
-public class UniversalOpenAiClient
+public class UniversalOpenAiClient : IDisposable
 {
     private readonly HttpClient HTTP_CLIENT;
 
@@ -135,4 +135,25 @@ public class UniversalOpenAiClient
 
         return JsonConvert.DeserializeObject<T[]>(data.ToString(), _defaultSettings)!;
     }
+
+
+    #region Dispose
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        if (_disposedValue)
+        {
+            return;
+        }
+
+        HTTP_CLIENT.Dispose();
+
+        _disposedValue = true;
+    }
+
+
+    private bool _disposedValue;
+
+    #endregion Dispose
 }
