@@ -13,4 +13,9 @@ public class GenerationSettings
     public float TopA { get; set; } = 0f;
     // public int? Seed { get; set; } = null;
     public int MaxTokens { get; set; } = 1000;
+
+    public string[] Stop { get; set; } =
+    [
+        "USER:"
+    ];
 }

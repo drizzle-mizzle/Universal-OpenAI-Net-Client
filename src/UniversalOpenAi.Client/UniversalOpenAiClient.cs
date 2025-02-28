@@ -87,6 +87,7 @@ public class UniversalOpenAiClient : IDisposable
             body["min_p"] = generationSettings.MinP;
             body["top_a"] = generationSettings.TopA;
             body["max_tokens"] = generationSettings.MaxTokens;
+            body["stop"] = JToken.FromObject(generationSettings.Stop, _defaultSerializer);
         }
 
         var json = JsonConvert.SerializeObject(body, _defaultSettings);
