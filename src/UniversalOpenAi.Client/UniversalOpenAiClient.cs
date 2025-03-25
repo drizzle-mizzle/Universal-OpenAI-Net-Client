@@ -94,7 +94,26 @@ public class UniversalOpenAiClient : IDisposable
         request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
         var response = await HTTP_CLIENT.SendAsync(request);
+
+        if (response is null)
+        {
+            throw new HttpRequestException("No response from OpenRouter");
+        }
+
         var content = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var message = $"HTTP {(int)response.StatusCode}: {response.ReasonPhrase}";
+
+            if (!string.IsNullOrWhiteSpace(content))
+            {
+                message += Environment.NewLine + content;
+            }
+
+            throw new HttpRequestException(message);
+        }
+
 
         return JsonConvert.DeserializeObject<CompletionsResponse>(content, _defaultSettings)!;
     }
@@ -130,7 +149,25 @@ public class UniversalOpenAiClient : IDisposable
         }
 
         var response = await HTTP_CLIENT.SendAsync(request);
+
+        if (response is null)
+        {
+            throw new HttpRequestException("No response from OpenRouter");
+        }
+
         var content = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var message = $"HTTP {(int)response.StatusCode}: {response.ReasonPhrase}";
+
+            if (!string.IsNullOrWhiteSpace(content))
+            {
+                message += Environment.NewLine + content;
+            }
+
+            throw new HttpRequestException(message);
+        }
 
         var data = JObject.Parse(content)["data"]!;
 
