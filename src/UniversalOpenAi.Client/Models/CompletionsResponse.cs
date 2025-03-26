@@ -17,7 +17,7 @@ public class Choice
 {
     public int Index { get; set; } // "index": 0,
     public ChatMessage? Message { get; set; } // "message": { },
-    public string? Logprobs { get; set; } // "logprobs": null,
+    // public string? Logprobs { get; set; } // "logprobs": null,
     public string FinishReason { get; set; } = null!; // "finish_reason": "stop"
 }
 
